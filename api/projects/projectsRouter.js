@@ -56,7 +56,10 @@ router.get("/:id/tasks", async (req, res) => {
   const id = req.params.id
 
   try {
-    const tasks = await Projects.getProjectTasks(id)
+    let tasks = await Projects.getProjectTasks(id)
+    tasks = tasks.map(task => {
+      return { ...task, completed: Boolean(task.completed) }
+    })
     if (!tasks.length) {
       res.status(400).json({ message: "This project has no tasks" })
     } else {
